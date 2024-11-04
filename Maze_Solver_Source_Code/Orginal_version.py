@@ -236,7 +236,7 @@ def node_iteration(start, goal, heuristic_value_dict, path_cost_dict):
 #     plt.ylabel('Y-axis')
 #     plt.show()
 
-
+# this is from riadh
 def plot_grid(grid_size_x, grid_size_y, blocked_obstacles, start, goal, path):
     plt.figure(figsize=(8, 6))
 
