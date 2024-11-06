@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import time
+import os
 
 
 def file_input():
@@ -19,8 +20,13 @@ def file_input():
         from google.colab import files
         uploaded = files.upload()
         input_name = list(uploaded.keys())[0]
-    if input_method == "2":
-        input_name = input("\n\tEnter the input file name with its extension type: ")
+    elif input_method == "2":
+        if os.name == 'nt':
+            input_name = "maze_input\\"+input("\n\tEnter the input file name with it's extension type: ")
+        else:
+            input_name = input("\n\tEnter the input file name with it's extension type: ")
+    else:
+        return "Something went wrong!"
 
     with open(input_name, "r") as file:
         grid_size_x = int(file.readline().strip())
@@ -62,7 +68,7 @@ def manual_input():
     blocked_obstacles = []
 
     for i in range(number_of_blocked_obstacles):
-        obstacle = input("\t\tEnter obstacle "+str(i)+" coordination: ")
+        obstacle = input("\t\tEnter obstacle "+str(i+1)+" coordination: ")
         # blocked_obstacles.append(obstacle)    # ##this is string list
         x, y = map(int, obstacle.split(","))
         if x < 0 and x > grid_size_x or y < 0 and y > grid_size_y:
@@ -176,6 +182,7 @@ def get_path_cost(adjacent_nodes):
 
 def node_iteration(start, goal, heuristic_value_dict, path_cost_dict):
     start_time = time.time()
+
     def smallest_node_for_f_of_n(open_node, close_node):
         filtered_open_node = {node: cost for node, cost in open_node.items() if node not in close_node}
         smallest_node = min(filtered_open_node, key=filtered_open_node.get) if filtered_open_node else None
@@ -381,7 +388,6 @@ def main():
         grid_size_x, grid_size_y, blocked_obstacles, start, goal = file_input()
     elif mode == 2:
         grid_size_x, grid_size_y, blocked_obstacles, start, goal = manual_input()
-
     else:
         print("Selection is invalid.")
     start_time = time.time()
